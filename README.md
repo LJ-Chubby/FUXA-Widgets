@@ -22,7 +22,7 @@
 *   通过Git克隆仓库： `git clone https://github.com/LJ-Chubby/FUXA-Widgets.git`
 *   复制到“**FUXA\server\_widgets**”文件夹内。
 *   启动你的FUXA项目并进入编辑器。
-*   在编辑器左侧小部件内就可以拖使用了。
+*   在编辑器左侧小部件内就可以拖到画布上使用了。
     
 > **提示**：确保将SVG文件放到"**_widgets**"子文件夹内，否则多层文件夹会导致编辑器无法正确加载显示。
 
