@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<svg id="pumpWidget" width="140" height="80" viewBox="30 60 140 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+	<!-- 简单的泵示意图：泵体 + 转子（叶轮） -->
+	<defs>
+		<style>
+			<![CDATA[
+      .pump-body { fill: #dddddd; stroke: #888888; stroke-width: 2; }
+      .impeller { fill: #777777; stroke: #444444; stroke-width: 1; transform-origin: 100px 100px; }
+    ]]>
+		</style>
+	</defs>
+
+	<!-- 画布背景，初始透明白 -->
+	<rect id="bg" x="30" y="60" width="140" height="80" fill="#ffffff00" />
+
+	<!-- 泵体 -->
+	<g id="body">
+		<rect x="30" y="60" width="140" height="80" rx="12" class="pump-body" />
+		<circle cx="100" cy="100" r="30" fill="#f0f0f0" stroke="#999999" stroke-width="4" />
+	</g>
+
+	<!-- 叶轮（4 个叶片）组合在一起，便于整体旋转 -->
+	<g id="impellerGroup" transform="translate(100,100)">
+		<g id="impeller" class="impeller">
+			<!-- 使用单个叶片形状并通过旋转生成 4 个对称叶片，避免坐标不一致导致显示异常 -->
+			<g transform="rotate(0)"><path d="M0,-6 L36,-18 L32,-6 Z" /></g>
+			<g transform="rotate(90)"><path d="M0,-6 L36,-18 L32,-6 Z" /></g>
+			<g transform="rotate(180)"><path d="M0,-6 L36,-18 L32,-6 Z" /></g>
+			<g transform="rotate(270)"><path d="M0,-6 L36,-18 L32,-6 Z" /></g>
+			<circle id="hub" cx="0" cy="0" r="6" fill="#555" stroke="#444444" stroke-width="1" />
+		</g>
+	</g>
+
+	<!-- 静态预览（用于 <img> 预览，不参与动画） -->
+	<g id="previewPump" transform="translate(20,20)">
+		<rect x="0" y="40" width="80" height="40" rx="8" fill="#dddddd" stroke="#888888" stroke-width="2" />
+		<g transform="translate(40,60)">
+			<g>
+				<g transform="rotate(0)"><path d="M0,-3 L18,-9 L16,-3 Z" fill="#2b82ffff" stroke="#2b82ffff" /></g>
+				<g transform="rotate(90)"><path d="M0,-3 L18,-9 L16,-3 Z" fill="#2b82ffff" stroke="#2b82ffff" /></g>
+				<g transform="rotate(180)"><path d="M0,-3 L18,-9 L16,-3 Z" fill="#2b82ffff" stroke="#2b82ffff" /></g>
+				<g transform="rotate(270)"><path d="M0,-3 L18,-9 L16,-3 Z" fill="#2b82ffff" stroke="#2b82ffff" /></g>
+				<circle cx="0" cy="0" r="3" fill="#2b82ffff" stroke="#2b82ffff" />
+			</g>
+		</g>
+	</g>
+
+	<script type="text/javascript">
+		<![CDATA[
+    //!export-start
+    // 使用 8 位十六进制颜色以与 FUXA 示例一致（末尾为 alpha）
+    let _pn_value = 0; // 0 或 1（非 0 视为开启）
+    let _pc_onColor = "#2b82ffff";
+    let _pc_offColor = "#777777ff";
+    //!export-end
+
+    let rotation = 0;
+    let running = false;
+    let animId = null;
+
+    // 向外发送值的简易实现：使用 postMessage，平台可根据需要替换实现
+    function postValue(id, value) {
+      try {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({ id: id, value: value }, '*');
+        }
+      } catch (e) {
+        // 忽略异常
+      }
+    }
+
+    // 为叶轮的各个路径和中心 hub 设置颜色（通过 inline style 覆盖 CSS）
+    function setImpellerColor(color, strokeColor) {
+      const imp = document.getElementById('impeller');
+      if (!imp) return;
+      const paths = imp.querySelectorAll('path');
+      paths.forEach(p => {
+        p.style.fill = color;
+        p.style.stroke = strokeColor || color;
+      });
+      const hub = document.getElementById('hub');
+      if (hub) {
+        hub.style.fill = color;
+        hub.style.stroke = strokeColor || '#444444';
+      }
+    }
+
+    // 初始化：隐藏预览并根据初始值设置颜色和动画状态
+    function init() {
+      const pw = document.getElementById('previewPump');
+      if (pw) pw.style.display = 'none';
+
+      const isOn = Number(_pn_value) !== 0; // 将任何非零值视为开启
+      const color = (isOn ? _pc_onColor : _pc_offColor);
+      const stroke = (isOn ? _pc_onColor : '#444444');
+      setImpellerColor(color, stroke);
+
+      // 根据当前值启动或停止动画
+      applyValue(_pn_value);
+    }
+
+    // 动画循环：更新旋转角度并应用 transform
+    function animate() {
+      const g = document.getElementById('impellerGroup');
+      if (!g) return;
+      rotation = (rotation + 6) % 360;
+      g.setAttribute('transform', 'translate(100,100) rotate(' + rotation + ')');
+      animId = requestAnimationFrame(animate);
+    }
+
+    // 根据传入的值应用状态：颜色与启动/停止动画
+    function applyValue(v) {
+      const isOn = Number(v) !== 0; // 将任何非零值视为开启
+      if (isOn) {
+        // 设为开启颜色并启动旋转
+        setImpellerColor(_pc_onColor, _pc_onColor);
+        if (!running) {
+          running = true;
+          if (animId === null) animate();
+        }
+        // 可选：向外报告当前状态
+        postValue('_pn_value', 1);
+      } else {
+        // 设为关闭颜色并停止旋转
+        setImpellerColor(_pc_offColor, '#444444');
+        if (running) {
+          running = false;
+          if (animId !== null) { cancelAnimationFrame(animId); animId = null; }
+        }
+        postValue('_pn_value', 0);
+      }
+    }
+
+    // 接收外部传入的值并应用
+    function putValue(id, value) {
+      switch(id) {
+        case '_pn_value':
+          _pn_value = Number(value);
+          applyValue(_pn_value);
+          break;
+        case '_pc_onColor':
+          _pc_onColor = value;
+          init();
+          break;
+        case '_pc_offColor':
+          _pc_offColor = value;
+          init();
+          break;
+      }
+    }
+
+    // 确保当 SVG 从 DOM 中移除时清理动画（例如在编辑器切换时）
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((m) => {
+        m.removedNodes.forEach((node) => {
+          if (node && node.id === 'pumpWidget') {
+            if (animId !== null) cancelAnimationFrame(animId);
+            observer.disconnect();
+          }
+        });
+      });
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    // 延迟初始化，确保元素已就绪
+    setTimeout(init, 50);
+  ]]>
+	</script>
+</svg>
