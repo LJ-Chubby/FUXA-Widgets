@@ -31,20 +31,6 @@
 		</g>
 	</g>
 
-	<!-- 静态预览（用于 <img> 预览，不参与动画） -->
-	<g id="previewPump" transform="translate(20,20)">
-		<rect x="0" y="40" width="80" height="40" rx="8" fill="#dddddd" stroke="#888888" stroke-width="2" />
-		<g transform="translate(40,60)">
-			<g>
-				<g transform="rotate(0)"><path d="M0,-3 L18,-9 L16,-3 Z" fill="#2b82ffff" stroke="#2b82ffff" /></g>
-				<g transform="rotate(90)"><path d="M0,-3 L18,-9 L16,-3 Z" fill="#2b82ffff" stroke="#2b82ffff" /></g>
-				<g transform="rotate(180)"><path d="M0,-3 L18,-9 L16,-3 Z" fill="#2b82ffff" stroke="#2b82ffff" /></g>
-				<g transform="rotate(270)"><path d="M0,-3 L18,-9 L16,-3 Z" fill="#2b82ffff" stroke="#2b82ffff" /></g>
-				<circle cx="0" cy="0" r="3" fill="#2b82ffff" stroke="#2b82ffff" />
-			</g>
-		</g>
-	</g>
-
 	<script type="text/javascript">
 		<![CDATA[
     //!export-start
