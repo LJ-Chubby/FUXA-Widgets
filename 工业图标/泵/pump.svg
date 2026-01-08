@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <svg id="pumpWidget" width="140" height="80" viewBox="30 60 140 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
-	<!-- ¼òµ¥µÄ±ÃÊ¾ÒâÍ¼£º±ÃÌå + ×ª×Ó£¨Ò¶ÂÖ£© -->
+	<!-- ç®€å•çš„æ³µç¤ºæ„å›¾ï¼šæ³µä½“ + è½¬å­ï¼ˆå¶è½®ï¼‰ -->
 	<defs>
 		<style>
 			<![CDATA[
@@ -10,19 +10,19 @@
 		</style>
 	</defs>
 
-	<!-- »­²¼±³¾°£¬³õÊ¼Í¸Ã÷°× -->
+	<!-- ç”»å¸ƒèƒŒæ™¯ï¼Œåˆå§‹é€æ˜Žç™½ -->
 	<rect id="bg" x="30" y="60" width="140" height="80" fill="#ffffff00" />
 
-	<!-- ±ÃÌå -->
+	<!-- æ³µä½“ -->
 	<g id="body">
 		<rect x="30" y="60" width="140" height="80" rx="12" class="pump-body" />
 		<circle cx="100" cy="100" r="30" fill="#f0f0f0" stroke="#999999" stroke-width="4" />
 	</g>
 
-	<!-- Ò¶ÂÖ£¨4 ¸öÒ¶Æ¬£©×éºÏÔÚÒ»Æð£¬±ãÓÚÕûÌåÐý×ª -->
+	<!-- å¶è½®ï¼ˆ4 ä¸ªå¶ç‰‡ï¼‰ç»„åˆåœ¨ä¸€èµ·ï¼Œä¾¿äºŽæ•´ä½“æ—‹è½¬ -->
 	<g id="impellerGroup" transform="translate(100,100)">
 		<g id="impeller" class="impeller">
-			<!-- Ê¹ÓÃµ¥¸öÒ¶Æ¬ÐÎ×´²¢Í¨¹ýÐý×ªÉú³É 4 ¸ö¶Ô³ÆÒ¶Æ¬£¬±ÜÃâ×ø±ê²»Ò»ÖÂµ¼ÖÂÏÔÊ¾Òì³£ -->
+			<!-- ä½¿ç”¨å•ä¸ªå¶ç‰‡å½¢çŠ¶å¹¶é€šè¿‡æ—‹è½¬ç”Ÿæˆ 4 ä¸ªå¯¹ç§°å¶ç‰‡ï¼Œé¿å…åæ ‡ä¸ä¸€è‡´å¯¼è‡´æ˜¾ç¤ºå¼‚å¸¸ -->
 			<g transform="rotate(0)"><path d="M0,-6 L36,-18 L32,-6 Z" /></g>
 			<g transform="rotate(90)"><path d="M0,-6 L36,-18 L32,-6 Z" /></g>
 			<g transform="rotate(180)"><path d="M0,-6 L36,-18 L32,-6 Z" /></g>
@@ -31,7 +31,7 @@
 		</g>
 	</g>
 
-	<!-- ¾²Ì¬Ô¤ÀÀ£¨ÓÃÓÚ <img> Ô¤ÀÀ£¬²»²ÎÓë¶¯»­£© -->
+	<!-- é™æ€é¢„è§ˆï¼ˆç”¨äºŽ <img> é¢„è§ˆï¼Œä¸å‚ä¸ŽåŠ¨ç”»ï¼‰ -->
 	<g id="previewPump" transform="translate(20,20)">
 		<rect x="0" y="40" width="80" height="40" rx="8" fill="#dddddd" stroke="#888888" stroke-width="2" />
 		<g transform="translate(40,60)">
@@ -48,8 +48,8 @@
 	<script type="text/javascript">
 		<![CDATA[
     //!export-start
-    // Ê¹ÓÃ 8 Î»Ê®Áù½øÖÆÑÕÉ«ÒÔÓë FUXA Ê¾ÀýÒ»ÖÂ£¨Ä©Î²Îª alpha£©
-    let _pn_value = 0; // 0 »ò 1£¨·Ç 0 ÊÓÎª¿ªÆô£©
+    // ä½¿ç”¨ 8 ä½åå…­è¿›åˆ¶é¢œè‰²ä»¥ä¸Ž FUXA ç¤ºä¾‹ä¸€è‡´ï¼ˆæœ«å°¾ä¸º alphaï¼‰
+    let _pn_value = 0; // 0 æˆ– 1ï¼ˆéž 0 è§†ä¸ºå¼€å¯ï¼‰
     let _pc_onColor = "#2b82ffff";
     let _pc_offColor = "#777777ff";
     //!export-end
@@ -58,18 +58,18 @@
     let running = false;
     let animId = null;
 
-    // ÏòÍâ·¢ËÍÖµµÄ¼òÒ×ÊµÏÖ£ºÊ¹ÓÃ postMessage£¬Æ½Ì¨¿É¸ù¾ÝÐèÒªÌæ»»ÊµÏÖ
+    // å‘å¤–å‘é€å€¼çš„ç®€æ˜“å®žçŽ°ï¼šä½¿ç”¨ postMessageï¼Œå¹³å°å¯æ ¹æ®éœ€è¦æ›¿æ¢å®žçŽ°
     function postValue(id, value) {
       try {
         if (window.parent && window.parent !== window) {
           window.parent.postMessage({ id: id, value: value }, '*');
         }
       } catch (e) {
-        // ºöÂÔÒì³£
+        // å¿½ç•¥å¼‚å¸¸
       }
     }
 
-    // ÎªÒ¶ÂÖµÄ¸÷¸öÂ·¾¶ºÍÖÐÐÄ hub ÉèÖÃÑÕÉ«£¨Í¨¹ý inline style ¸²¸Ç CSS£©
+    // ä¸ºå¶è½®çš„å„ä¸ªè·¯å¾„å’Œä¸­å¿ƒ hub è®¾ç½®é¢œè‰²ï¼ˆé€šè¿‡ inline style è¦†ç›– CSSï¼‰
     function setImpellerColor(color, strokeColor) {
       const imp = document.getElementById('impeller');
       if (!imp) return;
@@ -85,21 +85,21 @@
       }
     }
 
-    // ³õÊ¼»¯£ºÒþ²ØÔ¤ÀÀ²¢¸ù¾Ý³õÊ¼ÖµÉèÖÃÑÕÉ«ºÍ¶¯»­×´Ì¬
+    // åˆå§‹åŒ–ï¼šéšè—é¢„è§ˆå¹¶æ ¹æ®åˆå§‹å€¼è®¾ç½®é¢œè‰²å’ŒåŠ¨ç”»çŠ¶æ€
     function init() {
       const pw = document.getElementById('previewPump');
       if (pw) pw.style.display = 'none';
 
-      const isOn = Number(_pn_value) !== 0; // ½«ÈÎºÎ·ÇÁãÖµÊÓÎª¿ªÆô
+      const isOn = Number(_pn_value) !== 0; // å°†ä»»ä½•éžé›¶å€¼è§†ä¸ºå¼€å¯
       const color = (isOn ? _pc_onColor : _pc_offColor);
       const stroke = (isOn ? _pc_onColor : '#444444');
       setImpellerColor(color, stroke);
 
-      // ¸ù¾Ýµ±Ç°ÖµÆô¶¯»òÍ£Ö¹¶¯»­
+      // æ ¹æ®å½“å‰å€¼å¯åŠ¨æˆ–åœæ­¢åŠ¨ç”»
       applyValue(_pn_value);
     }
 
-    // ¶¯»­Ñ­»·£º¸üÐÂÐý×ª½Ç¶È²¢Ó¦ÓÃ transform
+    // åŠ¨ç”»å¾ªçŽ¯ï¼šæ›´æ–°æ—‹è½¬è§’åº¦å¹¶åº”ç”¨ transform
     function animate() {
       const g = document.getElementById('impellerGroup');
       if (!g) return;
@@ -108,20 +108,20 @@
       animId = requestAnimationFrame(animate);
     }
 
-    // ¸ù¾Ý´«ÈëµÄÖµÓ¦ÓÃ×´Ì¬£ºÑÕÉ«ÓëÆô¶¯/Í£Ö¹¶¯»­
+    // æ ¹æ®ä¼ å…¥çš„å€¼åº”ç”¨çŠ¶æ€ï¼šé¢œè‰²ä¸Žå¯åŠ¨/åœæ­¢åŠ¨ç”»
     function applyValue(v) {
-      const isOn = Number(v) !== 0; // ½«ÈÎºÎ·ÇÁãÖµÊÓÎª¿ªÆô
+      const isOn = Number(v) !== 0; // å°†ä»»ä½•éžé›¶å€¼è§†ä¸ºå¼€å¯
       if (isOn) {
-        // ÉèÎª¿ªÆôÑÕÉ«²¢Æô¶¯Ðý×ª
+        // è®¾ä¸ºå¼€å¯é¢œè‰²å¹¶å¯åŠ¨æ—‹è½¬
         setImpellerColor(_pc_onColor, _pc_onColor);
         if (!running) {
           running = true;
           if (animId === null) animate();
         }
-        // ¿ÉÑ¡£ºÏòÍâ±¨¸æµ±Ç°×´Ì¬
+        // å¯é€‰ï¼šå‘å¤–æŠ¥å‘Šå½“å‰çŠ¶æ€
         postValue('_pn_value', 1);
       } else {
-        // ÉèÎª¹Ø±ÕÑÕÉ«²¢Í£Ö¹Ðý×ª
+        // è®¾ä¸ºå…³é—­é¢œè‰²å¹¶åœæ­¢æ—‹è½¬
         setImpellerColor(_pc_offColor, '#444444');
         if (running) {
           running = false;
@@ -131,7 +131,7 @@
       }
     }
 
-    // ½ÓÊÕÍâ²¿´«ÈëµÄÖµ²¢Ó¦ÓÃ
+    // æŽ¥æ”¶å¤–éƒ¨ä¼ å…¥çš„å€¼å¹¶åº”ç”¨
     function putValue(id, value) {
       switch(id) {
         case '_pn_value':
@@ -149,7 +149,7 @@
       }
     }
 
-    // È·±£µ± SVG ´Ó DOM ÖÐÒÆ³ýÊ±ÇåÀí¶¯»­£¨ÀýÈçÔÚ±à¼­Æ÷ÇÐ»»Ê±£©
+    // ç¡®ä¿å½“ SVG ä»Ž DOM ä¸­ç§»é™¤æ—¶æ¸…ç†åŠ¨ç”»ï¼ˆä¾‹å¦‚åœ¨ç¼–è¾‘å™¨åˆ‡æ¢æ—¶ï¼‰
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((m) => {
         m.removedNodes.forEach((node) => {
@@ -162,7 +162,7 @@
     });
     observer.observe(document.body, { childList: true, subtree: true });
 
-    // ÑÓ³Ù³õÊ¼»¯£¬È·±£ÔªËØÒÑ¾ÍÐ÷
+    // å»¶è¿Ÿåˆå§‹åŒ–ï¼Œç¡®ä¿å…ƒç´ å·²å°±ç»ª
     setTimeout(init, 50);
   ]]>
 	</script>
